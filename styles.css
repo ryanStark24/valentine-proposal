@@ -205,6 +205,13 @@ body {
   font-weight: 600;
   min-height: 30px;
   animation: fadeIn 0.5s ease;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 100%;
+  word-wrap: break-word;
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
 }
 
 @keyframes fadeIn {
@@ -357,5 +364,11 @@ body {
 
   .celebration-subtext {
     font-size: 1.2rem;
+  }
+
+  .please-text {
+    font-size: 1rem;
+    padding: 8px;
+    line-height: 1.5;
   }
 }

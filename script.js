@@ -23,14 +23,17 @@ const MEME_URLS = [
     "https://media.giphy.com/media/3oz8xAFtqoOUUrsh7W/giphy.gif"
 ];
 
+const CAT_GIF = "https://media.giphy.com/media/nR4L10XlJcSeQ/giphy.gif"; // Animated T-Rex eating
 const CONFETTI_COLORS = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#ffd89b'];
 const MAX_JUMPS = 4;
+const MAX_NO_CLICKS = 10;
 const CONFETTI_COUNT = 80;
 
 // State
 let messageIndex = 0;
 let noBtnClickCount = 0;
 let noButtonJumpCount = 0;
+let catEaten = false;
 
 // Initialize No button
 noBtn.style.position = 'relative';
@@ -62,6 +65,54 @@ function moveNoButton() {
     noBtn.style.position = 'fixed';
     noBtn.style.left = `${randomX}px`;
     noBtn.style.top = `${randomY}px`;
+}
+
+function summonCat() {
+    catEaten = true;
+    
+    // Create animated cat element
+    const cat = document.createElement('img');
+    cat.src = CAT_GIF;
+    cat.className = 'cat';
+    cat.alt = 'Cat eating the No button';
+    
+    // Position cat near the No button
+    const btnRect = noBtn.getBoundingClientRect();
+    cat.style.position = 'fixed';
+    cat.style.left = `${btnRect.left - 100}px`;
+    cat.style.top = `${btnRect.top - 50}px`;
+    cat.style.width = '200px';
+    cat.style.zIndex = '9999';
+    cat.style.opacity = '0';
+    cat.style.transform = 'scale(0.5)';
+    cat.style.transition = 'all 0.5s ease';
+    
+    document.body.appendChild(cat);
+    
+    // Animate cat appearing
+    setTimeout(() => {
+        cat.style.opacity = '1';
+        cat.style.transform = 'scale(1)';
+    }, 50);
+    
+    // Animate eating the button
+    setTimeout(() => {
+        noBtn.style.transform = 'scale(0) rotate(180deg)';
+        noBtn.style.opacity = '0';
+        pleaseText.innerHTML = "😺 The cat ate the No button!<br>Only Yes remains! 😺";
+        pleaseText.style.color = '#f5576c';
+        pleaseText.style.fontWeight = '700';
+    }, 800);
+    
+    // Remove button and cat
+    setTimeout(() => {
+        noBtn.style.display = 'none';
+        cat.style.opacity = '0';
+    }, 2000);
+    
+    setTimeout(() => {
+        cat.remove();
+    }, 2500);
 }
 
 function displayRandomMeme() {
@@ -102,24 +153,51 @@ function createConfetti() {
 }
 
 // Event Listeners
-noBtn.addEventListener('mouseover', () => {
+// Handle both desktop hover and mobile touch for No button movement
+function handleNoButtonInteraction(e) {
+    if (catEaten) return;
+    
     if (noButtonJumpCount >= MAX_JUMPS) {
         pleaseText.textContent = "Okay fine, you can click it now... 😔";
         return;
+    }
+    
+    // On mobile tap/click (first 4 times), prevent default and move button
+    if (e.type === 'touchstart' || e.type === 'click') {
+        e.preventDefault();
     }
     
     moveNoButton();
     noButtonJumpCount++;
     showPleaseMessage();
     yesBtn.style.transform = 'scale(1.1)';
-});
+}
 
+// Desktop: move on hover
+noBtn.addEventListener('mouseover', handleNoButtonInteraction);
+
+// Mobile: move on touch (first 4 times)
+noBtn.addEventListener('touchstart', handleNoButtonInteraction, { passive: false });
+
+// Click handler for after button stops moving (desktop and mobile)
 noBtn.addEventListener('click', (e) => {
+    if (catEaten) return;
+    
+    // If still jumping (less than 4 jumps), just move the button
+    if (noButtonJumpCount < MAX_JUMPS) {
+        handleNoButtonInteraction(e);
+        return;
+    }
+    
     e.preventDefault();
-    
-    if (noButtonJumpCount < MAX_JUMPS) return;
-    
     noBtnClickCount++;
+    
+    // Check if cat should appear
+    if (noBtnClickCount >= MAX_NO_CLICKS) {
+        summonCat();
+        return;
+    }
+    
     showPleaseMessage();
     
     const yesScale = Math.min(1.1 + noBtnClickCount * 0.1, 1.5);
