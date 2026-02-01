@@ -75,10 +75,13 @@ function showPleaseMessage(): void {
   messageIndex = (messageIndex + 1) % pleaseMessages.length;
 }
 
-// Yes button click - Show celebration
+// Yes button click - Show celebration and memes
 yesBtn.addEventListener("click", () => {
   questionCard.style.display = "none";
   celebration.classList.remove("hidden");
+
+  // Display a random cheerful meme
+  displayRandomMeme();
 
   // Create confetti
   createConfetti();
@@ -88,6 +91,32 @@ yesBtn.addEventListener("click", () => {
     celebration.style.transform = "scale(1.1)";
   }, 100);
 });
+
+// Display random cheerful celebration meme
+function displayRandomMeme(): void {
+  const memeContainer = document.getElementById(
+    "memeContainer",
+  ) as HTMLDivElement;
+
+  // Array of cheerful celebration GIF URLs from Tenor
+  const memeUrls: string[] = [
+    "https://media.tenor.com/fSt8H-sEv1cAAAAM/yes-baby.gif",
+    "https://media.tenor.com/HVfG7pII8BAAAAAC/snoopy-peanuts.gif",
+    "https://media.tenor.com/1RKCg1yrC4UAAAAC/happy-minion.gif",
+    "https://media.tenor.com/x8v1oNUOmg4AAAAd/baby-yoda.gif",
+    "https://media.tenor.com/2fZL7PghGpoAAAAC/excited-yes.gif",
+    "https://media.tenor.com/WbFkGKU6Ev8AAAAC/happy-dance.gif",
+  ];
+
+  // Pick a random meme
+  const randomMeme = memeUrls[Math.floor(Math.random() * memeUrls.length)];
+
+  // Create and display the meme image
+  const memeImg = document.createElement("img");
+  memeImg.src = randomMeme;
+  memeImg.alt = "Celebration meme";
+  memeContainer.appendChild(memeImg);
+}
 
 // Create confetti effect
 function createConfetti(): void {
