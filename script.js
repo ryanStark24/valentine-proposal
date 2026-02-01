@@ -79,14 +79,12 @@ yesBtn.addEventListener('click', () => {
 function displayRandomMeme() {
     const memeContainer = document.getElementById('memeContainer');
     
-    // Array of cheerful celebration GIF URLs from Tenor
+    // Array of local meme images
     const memeUrls = [
-        "https://media.tenor.com/fSt8H-sEv1cAAAAM/yes-baby.gif",
-        "https://media.tenor.com/HVfG7pII8BAAAAAC/snoopy-peanuts.gif",
-        "https://media.tenor.com/1RKCg1yrC4UAAAAC/happy-minion.gif",
-        "https://media.tenor.com/x8v1oNUOmg4AAAAd/baby-yoda.gif",
-        "https://media.tenor.com/2fZL7PghGpoAAAAC/excited-yes.gif",
-        "https://media.tenor.com/WbFkGKU6Ev8AAAAC/happy-dance.gif"
+        "meme1.png",
+        "meme2.png",
+        "meme3.png",
+        "meme4.png"
     ];
     
     // Pick a random meme
@@ -96,26 +94,34 @@ function displayRandomMeme() {
     const memeImg = document.createElement('img');
     memeImg.src = randomMeme;
     memeImg.alt = 'Celebration meme';
+    memeImg.style.opacity = '0';
     memeContainer.appendChild(memeImg);
+    
+    // Fade in the meme
+    setTimeout(() => {
+        memeImg.style.transition = 'opacity 0.5s ease-in';
+        memeImg.style.opacity = '1';
+    }, 100);
 }
 // Create confetti effect
 function createConfetti() {
     const confettiContainer = document.querySelector('.confetti-container');
     const colors = ['#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#ffd89b'];
-    for (let i = 0; i < 150; i++) {
+    for (let i = 0; i < 80; i++) {
         setTimeout(() => {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
             confetti.style.left = `${Math.random() * 100}%`;
             confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = `${Math.random() * 0.5}s`;
-            confetti.style.animationDuration = `${2 + Math.random() * 2}s`;
+            confetti.style.animationDelay = `0s`;
+            confetti.style.animationDuration = `${2.5 + Math.random() * 1}s`;
+            confetti.style.willChange = 'transform, opacity';
             confettiContainer.appendChild(confetti);
             // Remove confetti after animation
             setTimeout(() => {
                 confetti.remove();
-            }, 4000);
-        }, i * 20);
+            }, 3500);
+        }, i * 15);
     }
 }
 // Add shake animation to CSS dynamically
