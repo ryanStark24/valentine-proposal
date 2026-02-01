@@ -50,17 +50,39 @@ function showPleaseMessage() {
 
 function moveNoButton() {
     const card = questionCard.getBoundingClientRect();
-    const margin = 20;
+    const yesRect = yesBtn.getBoundingClientRect();
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
     
-    const maxX = card.left + card.width - noBtn.offsetWidth - margin;
-    const maxY = card.top + card.height - noBtn.offsetHeight - margin;
+    // More conservative margins to stay within card
+    const margin = 40;
     const minX = card.left + margin;
-    const minY = card.top + margin;
+    const minY = card.top + margin + 150; // Start below the question text
+    const maxX = card.right - btnWidth - margin;
+    const maxY = card.bottom - btnHeight - margin - 100; // Stay above bottom
     
     if (maxX <= minX || maxY <= minY) return;
     
-    const randomX = clamp(random(minX, maxX), minX, maxX);
-    const randomY = clamp(random(minY, maxY), minY, maxY);
+    let randomX, randomY;
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    // Try to find a position that doesn't overlap with Yes button
+    do {
+        randomX = clamp(random(minX, maxX), minX, maxX);
+        randomY = clamp(random(minY, maxY), minY, maxY);
+        attempts++;
+        
+        // Check if this position would overlap with Yes button
+        const wouldOverlap = !(
+            randomX + btnWidth < yesRect.left - 20 ||
+            randomX > yesRect.right + 20 ||
+            randomY + btnHeight < yesRect.top - 20 ||
+            randomY > yesRect.bottom + 20
+        );
+        
+        if (!wouldOverlap || attempts >= maxAttempts) break;
+    } while (attempts < maxAttempts);
     
     noBtn.style.position = 'fixed';
     noBtn.style.left = `${randomX}px`;
@@ -163,8 +185,9 @@ function handleNoButtonInteraction(e) {
     }
     
     // On mobile tap/click (first 4 times), prevent default and move button
-    if (e.type === 'touchstart' || e.type === 'click') {
+    if (e.type === 'touchstart') {
         e.preventDefault();
+        e.stopPropagation();
     }
     
     moveNoButton();
@@ -181,6 +204,9 @@ noBtn.addEventListener('touchstart', handleNoButtonInteraction, { passive: false
 
 // Click handler for after button stops moving (desktop and mobile)
 noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
     if (catEaten) return;
     
     // If still jumping (less than 4 jumps), just move the button
@@ -189,7 +215,6 @@ noBtn.addEventListener('click', (e) => {
         return;
     }
     
-    e.preventDefault();
     noBtnClickCount++;
     
     // Check if cat should appear
