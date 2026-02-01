@@ -13,14 +13,14 @@ const PLEASE_MESSAGES = [
 ];
 
 const MEME_URLS = [
-    "https://media.giphy.com/media/artj92V8o75VPL7AeQ/giphy.gif",
-    "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
-    "https://media.giphy.com/media/kyLYXonQYYfwYDIeZl/giphy.gif",
-    "https://media.giphy.com/media/5GoVLqeAOo6PK/giphy.gif",
-    "https://media.giphy.com/media/g9582DNuQppxC/giphy.gif",
-    "https://media.giphy.com/media/26u4cqiYI30juCOGY/giphy.gif",
-    "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif",
-    "https://media.giphy.com/media/3oz8xAFtqoOUUrsh7W/giphy.gif"
+    "https://media.giphy.com/media/artj92V8o75VPL7AeQ/giphy.gif",  // Happy celebration
+    "https://media.giphy.com/media/kyLYXonQYYfwYDIeZl/giphy.gif",  // Excited yes
+    "https://media.giphy.com/media/g9582DNuQppxC/giphy.gif",       // Celebration dance
+    "https://media.giphy.com/media/5xtDarmwsuR9sDRObyU/giphy.gif", // Happy dance
+    "https://media.giphy.com/media/3oz8xAFtqoOUUrsh7W/giphy.gif",  // Yay celebration
+    "https://media.giphy.com/media/LZElUsjl1Bu6c/giphy.gif",        // Excited celebration
+    "https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif",       // Happy yes
+    "https://media.giphy.com/media/Is1O1TWV0LEJi/giphy.gif"         // Celebration confetti
 ];
 
 const CAT_GIF = "https://media.giphy.com/media/nR4L10XlJcSeQ/giphy.gif"; // Animated T-Rex eating
